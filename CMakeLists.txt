@@ -13,6 +13,7 @@ set(SOURCES
     src/sphere.cpp
     src/hittableObjectsList.cpp
     src/hitpoint.cpp
+    src/interval.cpp
 )
 
 add_executable(${PROJECT_NAME}

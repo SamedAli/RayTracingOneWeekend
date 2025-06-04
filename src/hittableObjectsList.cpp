@@ -15,15 +15,15 @@ auto HittableObjectsList::add(std::shared_ptr<Hittable> obj) -> void
 	m_objects.push_back(obj);
 }
 
-auto HittableObjectsList::isHit(const Ray &ray, double rayTmin, double rayTmax, HitPoint &hitpoint) const -> bool
+auto HittableObjectsList::isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> bool
 {
 	HitPoint tmpHitPoint_;
 	auto     anythingHit     = false;
-	auto     closestHitSoFar = rayTmax;
+	auto     closestHitSoFar = rayT.m_max;
 
 	for (const auto &obj : m_objects)
 	{
-		if (obj->isHit(ray, rayTmin, closestHitSoFar, tmpHitPoint_))
+		if (obj->isHit(ray, Interval(rayT.m_min, closestHitSoFar), tmpHitPoint_))
 		{
 			anythingHit     = true;
 			closestHitSoFar = tmpHitPoint_.m_t;

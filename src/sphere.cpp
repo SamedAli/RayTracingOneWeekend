@@ -5,7 +5,7 @@
 Sphere::Sphere(const Point3 &center, double radius) : m_center(center), m_radius(std::fmax(0, radius))
 {}
 
-auto Sphere::isHit(const Ray &ray, double rayTmin, double rayTmax, HitPoint &hitpoint) const -> bool
+auto Sphere::isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> bool
 {
 	const auto oc_ = m_center - ray.origin();
 
@@ -22,10 +22,10 @@ auto Sphere::isHit(const Ray &ray, double rayTmin, double rayTmax, HitPoint &hit
 
 	// Find nearest root in acceptable range.
 	auto root_ = (h_ - sqrtd_) / a_;
-	if (root_ <= rayTmin || rayTmax <= root_)
+	if (!rayT.surrounds(root_))
 	{
 		root_ = (h_ + sqrtd_) / a_;
-		if (root_ <= rayTmin || rayTmax <= root_)
+		if (!rayT.surrounds(root_))
 			return false;
 	}
 

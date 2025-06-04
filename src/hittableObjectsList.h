@@ -14,7 +14,7 @@ class HittableObjectsList : public Hittable
 	auto clear() -> void;
 	auto add(std::shared_ptr<Hittable> obj) -> void;
 
-	auto isHit(const Ray &ray, double rayTmin, double rayTmax, HitPoint &hitpoint) const -> bool override;
+	auto isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> bool override;
 
   private:
 	std::vector<std::shared_ptr<Hittable>> m_objects;
