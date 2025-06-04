@@ -37,7 +37,7 @@ inline auto operator*(double scalar, const Vec3 &v) -> Vec3
 
 inline auto dot(const Vec3 &u, const Vec3 &v) -> double
 {
-	return u.x() * v.x() + u.y() + v.y() + u.z() * v.z();
+	return u.x() * v.x() + u.y() * v.y() + u.z() * v.z();
 }
 
 inline auto cross(const Vec3 &u, const Vec3 &v) -> Vec3

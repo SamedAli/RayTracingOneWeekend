@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <cstdint>
 
 class Vec3
 {
@@ -19,6 +18,7 @@ class Vec3
 	auto value() -> Array3 &;
 
 	auto length() const -> double;
+	auto lengthSquared() const -> double;
 
 	auto operator[](std::size_t i) const -> double;
 	auto operator[](std::size_t i) -> double &;
@@ -30,7 +30,5 @@ class Vec3
 	auto operator/=(double scalar) -> Vec3 &;
 
   private:
-	auto lengthSquared() const -> double;
-
 	Array3 m_vector;
 };

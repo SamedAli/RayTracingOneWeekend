@@ -1,0 +1,38 @@
+#include "sphere.h"
+
+#include <cmath>
+
+Sphere::Sphere(const Point3 &center, double radius) : m_center(center), m_radius(std::fmax(0, radius))
+{}
+
+auto Sphere::isHit(const Ray &ray, double rayTmin, double rayTmax, HitPoint &hitpoint) const -> bool
+{
+	const auto oc_ = m_center - ray.origin();
+
+	const auto a_ = ray.direction().lengthSquared();
+	const auto h_ = dot(ray.direction(), oc_);
+	const auto c_ = oc_.lengthSquared() - m_radius * m_radius;
+
+	const auto discriminant_ = h_ * h_ - a_ * c_;
+
+	if (discriminant_ < 0)
+		return false;
+
+	const auto sqrtd_ = std::sqrt(discriminant_);
+
+	// Find nearest root in acceptable range.
+	auto root_ = (h_ - sqrtd_) / a_;
+	if (root_ <= rayTmin || rayTmax <= root_)
+	{
+		root_ = (h_ + sqrtd_) / a_;
+		if (root_ <= rayTmin || rayTmax <= root_)
+			return false;
+	}
+
+	hitpoint.m_t         = root_;
+	hitpoint.m_point     = ray.at(hitpoint.m_t);
+	auto outwardsNormal_ = (hitpoint.m_point - m_center) / m_radius;
+	hitpoint.setFaceNormal(ray, outwardsNormal_);
+
+	return true;
+}

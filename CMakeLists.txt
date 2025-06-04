@@ -10,6 +10,9 @@ set(SOURCES
     src/vec3.cpp
     src/colorUtilities.cpp
     src/ray.cpp
+    src/sphere.cpp
+    src/hittableObjectsList.cpp
+    src/hitpoint.cpp
 )
 
 add_executable(${PROJECT_NAME}
