@@ -1,0 +1,67 @@
+#include <iostream>
+
+#include "colorUtilities.h"
+#include "ray.h"
+#include "vec3.h"
+#include "vec3utilities.h"
+
+auto rayColor(const Ray &ray) -> Color
+{
+	const auto unitDirection_ = unit(ray.direction()); //[-1< y < 1]?
+	const auto a_             = 0.5 * (unitDirection_.y() + 1.0);
+	return (1.0 - a_) * Color(1.0, 1.0, 1.0) + a_ * Color(0.5, 0.7, 1.0);
+}
+
+auto render(const std::uint32_t imageWidth,
+            const std::uint32_t imageHeight,
+            const Vec3         &pixel0,
+            const Vec3         &deltaX,
+            const Vec3         &deltaY,
+            const Vec3         &cameraCenter) -> void
+{
+	std::cout << "P3\n"
+	          << imageWidth << ' ' << imageHeight << "\n255\n";
+
+	for (size_t j = 0; j < imageHeight; j++)
+	{
+		std::clog << "\rScanlines remaining: " << (imageHeight - j) << ' ' << std::flush;
+
+		for (size_t i = 0; i < imageWidth; i++)
+		{
+			auto       pixelCenter_  = pixel0 + (deltaX * i + deltaY * j);
+			auto       rayDirection_ = pixelCenter_ - cameraCenter;
+			const auto ray_          = Ray{cameraCenter, rayDirection_};
+
+			auto pixelColor_ = rayColor(ray_);
+			writeColor(std::cout, pixelColor_);
+		}
+	}
+
+	std::clog << "\rDone. \n";
+}
+
+int main()
+{
+	// Image
+	constexpr auto          aspectRatio_ = 16.0 / 9.0;
+	constexpr std::uint32_t imageWidth_  = 1920;
+	constexpr std::uint32_t tmpImHeight_ = static_cast<std::uint32_t>(imageWidth_ / aspectRatio_);
+	constexpr std::uint32_t imageHeight_ = tmpImHeight_ > 1 ? tmpImHeight_ : 1;
+
+	// Camera
+	constexpr auto focalLength_    = 1.0;
+	constexpr auto viewportHeight_ = 2.0;
+	constexpr auto viewportWidth_  = viewportHeight_ * (static_cast<double>(imageWidth_) / imageHeight_);
+	const auto     cameraCenter_   = Point3{0, 0, 0};
+
+	const auto viewportVectorX_ = Vec3{viewportWidth_, 0, 0};
+	const auto viewportVectorY_ = Vec3{0, -viewportHeight_, 0};
+
+	const auto pixelDeltaX_ = viewportVectorX_ / imageWidth_;
+	const auto pixelDeltaY_ = viewportVectorY_ / imageHeight_;
+
+	const auto viewportUpperLeft_ = cameraCenter_ - Vec3(0, 0, focalLength_) - (viewportVectorX_ / 2) - (viewportVectorY_ / 2);
+	const auto viewportPixel00_   = viewportUpperLeft_ + (pixelDeltaX_ + pixelDeltaY_) * 0.5;
+
+	render(imageWidth_, imageHeight_, viewportPixel00_, pixelDeltaX_, pixelDeltaY_, cameraCenter_);
+}
