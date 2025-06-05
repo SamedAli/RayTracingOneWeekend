@@ -25,12 +25,13 @@ auto Camera::render(const Hittable &world) -> void
 	{
 		for (std::uint32_t i = 0; i < m_imageWidth; i++)
 		{
-			auto       pixelCenter_  = m_pixel0 + (m_deltaX * i + m_deltaY * j);
-			auto       rayDirection_ = pixelCenter_ - m_cameraCenter;
-			const auto ray_          = Ray{m_cameraCenter, rayDirection_};
-
-			auto pixelColor_ = rayColor(ray_, world);
-			writeColor(std::cout, pixelColor_);
+			Color pixelColor_{0, 0, 0};
+			for (size_t sample = 0; sample < m_nofSamplesPerPixel; ++sample)
+			{
+				Ray ray_ = getRay(i, j);
+				pixelColor_ += rayColor(ray_, world);
+			}
+			writeColor(std::cout, m_pixelSampleScale * pixelColor_);
 		}
 	}
 }
@@ -40,7 +41,8 @@ auto Camera::initialize() -> void
 	auto tmpImHeight_ = static_cast<std::uint32_t>(m_imageWidth / m_aspectRatio);
 	m_imageHeight     = tmpImHeight_ > 1 ? tmpImHeight_ : 1;
 
-	m_cameraCenter = Point3{0, 0, 0};
+	m_pixelSampleScale = 1.0 / m_nofSamplesPerPixel;
+	m_cameraCenter     = Point3{0, 0, 0};
 
 	// Determine viewport dimensions.
 	const auto focalLength_    = 1.0;
@@ -69,4 +71,26 @@ auto Camera::rayColor(const Ray &ray, const Hittable &world) -> Color
 	const auto unitDirection_ = unit(ray.direction()); //[-1< y < 1]?
 	const auto scalar_        = 0.5 * (unitDirection_.y() + 1.0);
 	return (1.0 - scalar_) * Color(1.0, 1.0, 1.0) + scalar_ * Color(0.5, 0.7, 1.0);
+}
+
+auto Camera::getRay(std::uint32_t xCoord, std::uint32_t yCoord) const -> Ray
+{
+	auto offset_      = sampleSquare();
+	auto pixelSample_ = m_pixel0 + ((xCoord + offset_.x()) * m_deltaX) + ((yCoord + offset_.y()) * m_deltaY);
+
+	auto rOrigin_ = m_cameraCenter;
+	auto rDir_    = pixelSample_ - rOrigin_;
+
+	return Ray{rOrigin_, rDir_};
+}
+
+auto Camera::sampleSquare() -> Vec3
+{
+	// Returns the vector to a random point in the [-.5,-.5]-[+.5,+.5] unit square.
+	return Vec3(randomDouble() - 0.5, randomDouble() - 0.5, 0);
+}
+
+auto Camera::setSamplesPerPixel(std::uint32_t nofSamples) -> void
+{
+	m_nofSamplesPerPixel = nofSamples;
 }

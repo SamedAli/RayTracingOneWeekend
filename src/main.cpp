@@ -15,6 +15,7 @@ auto main() -> int
 	Camera camera_{};
 	camera_.setAspectRatio(16.0 / 9.0);
 	camera_.setImageWidth(1920);
+	camera_.setSamplesPerPixel(3);
 
 	camera_.render(world_);
 }
