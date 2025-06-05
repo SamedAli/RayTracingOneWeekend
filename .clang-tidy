@@ -10,7 +10,9 @@ Checks: >
   modernize-use-trailing-return-type,
   -cppcoreguidelines-avoid-magic-numbers,
   -readability-magic-numbers,
-  -readability-identifier-naming
+  -bugprone-easily-swappable-parameters,
+  -readability-identifier-naming,
+  -readability-identifier-length
 
 WarningsAsErrors: '*'
 
@@ -44,3 +46,6 @@ CheckOptions:
 
   - key:             readability-identifier-naming.LocalVariableSuffix
     value:           _
+
+  - key:             readability-identifier-naming.LocalVariableMinLength
+    value:           0

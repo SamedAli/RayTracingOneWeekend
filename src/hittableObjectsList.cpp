@@ -1,6 +1,6 @@
 #include "hittableObjectsList.h"
 
-HittableObjectsList::HittableObjectsList(std::shared_ptr<Hittable> obj)
+HittableObjectsList::HittableObjectsList(const std::shared_ptr<Hittable> &obj)
 {
 	add(obj);
 }
@@ -10,7 +10,7 @@ auto HittableObjectsList::clear() -> void
 	m_objects.clear();
 }
 
-auto HittableObjectsList::add(std::shared_ptr<Hittable> obj) -> void
+auto HittableObjectsList::add(const std::shared_ptr<Hittable> &obj) -> void
 {
 	m_objects.push_back(obj);
 }
@@ -19,14 +19,14 @@ auto HittableObjectsList::isHit(const Ray &ray, Interval rayT, HitPoint &hitpoin
 {
 	HitPoint tmpHitPoint_;
 	auto     anythingHit     = false;
-	auto     closestHitSoFar = rayT.m_max;
+	auto     closestHitSoFar = rayT.getMax();
 
 	for (const auto &obj : m_objects)
 	{
-		if (obj->isHit(ray, Interval(rayT.m_min, closestHitSoFar), tmpHitPoint_))
+		if (obj->isHit(ray, Interval(rayT.getMin(), closestHitSoFar), tmpHitPoint_))
 		{
 			anythingHit     = true;
-			closestHitSoFar = tmpHitPoint_.m_t;
+			closestHitSoFar = tmpHitPoint_.getTValue();
 			hitpoint        = tmpHitPoint_;
 		}
 	}

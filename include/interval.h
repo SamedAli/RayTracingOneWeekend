@@ -10,9 +10,13 @@ class Interval
 	[[nodiscard]] auto contains(double val) const -> bool;
 	[[nodiscard]] auto surrounds(double val) const -> bool;
 
-	static const Interval m_empty;
-	static const Interval m_universe;
+	static const Interval sEmpty;
+	static const Interval sUniverse;
 
+	[[nodiscard]] auto getMin() const -> double;
+	[[nodiscard]] auto getMax() const -> double;
+
+  private:
 	double m_min;
 	double m_max;
 };

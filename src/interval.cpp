@@ -2,8 +2,8 @@
 
 #include "utilityFunctions.h"
 
-const Interval Interval::m_empty    = Interval(INFINITY_C, -INFINITY_C);
-const Interval Interval::m_universe = Interval(-INFINITY_C, INFINITY_C);
+const Interval Interval::sEmpty    = Interval(INFINITY_C, -INFINITY_C);
+const Interval Interval::sUniverse = Interval(-INFINITY_C, INFINITY_C);
 
 Interval::Interval() noexcept : m_min(INFINITY_C), m_max(-INFINITY_C)
 {}
@@ -24,4 +24,13 @@ auto Interval::contains(double val) const -> bool
 auto Interval::surrounds(double val) const -> bool
 {
 	return m_min < val && val < m_max;
+}
+
+[[nodiscard]] auto Interval::getMin() const -> double
+{
+	return m_min;
+}
+[[nodiscard]] auto Interval::getMax() const -> double
+{
+	return m_max;
 }

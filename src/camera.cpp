@@ -63,7 +63,7 @@ auto Camera::rayColor(const Ray &ray, const Hittable &world) -> Color
 	HitPoint hitpoint_;
 	if (world.isHit(ray, Interval(0, INFINITY_C), hitpoint_))
 	{
-		return 0.5 * (hitpoint_.m_normal + Color(1, 1, 1));
+		return 0.5 * (hitpoint_.getNormal() + Color(1, 1, 1));
 	}
 
 	const auto unitDirection_ = unit(ray.direction()); //[-1< y < 1]?

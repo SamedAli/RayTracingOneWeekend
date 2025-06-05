@@ -4,7 +4,7 @@
 #include <numbers>
 
 constexpr double INFINITY_C = std::numeric_limits<double>::infinity();
-constexpr double PI_C       = std::numbers::phi_v<double>;
+constexpr double PI_C       = std::numbers::pi_v<double>;
 
 constexpr auto degreesToRadians(double degrees) -> double
 {

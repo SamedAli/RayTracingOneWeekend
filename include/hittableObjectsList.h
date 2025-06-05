@@ -9,10 +9,10 @@ class HittableObjectsList : public Hittable
 {
   public:
 	explicit HittableObjectsList() noexcept = default;
-	explicit HittableObjectsList(std::shared_ptr<Hittable> obj);
+	explicit HittableObjectsList(const std::shared_ptr<Hittable> &obj);
 
 	auto clear() -> void;
-	auto add(std::shared_ptr<Hittable> obj) -> void;
+	auto add(const std::shared_ptr<Hittable> &obj) -> void;
 
 	[[nodiscard]] auto isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> bool override;
 
