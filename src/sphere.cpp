@@ -11,12 +11,14 @@ auto Sphere::isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> b
 
 	const auto a_ = ray.direction().lengthSquared();
 	const auto h_ = dot(ray.direction(), oc_);
-	const auto c_ = oc_.lengthSquared() - m_radius * m_radius;
+	const auto c_ = oc_.lengthSquared() - (m_radius * m_radius);
 
-	const auto discriminant_ = h_ * h_ - a_ * c_;
+	const auto discriminant_ = (h_ * h_) - (a_ * c_);
 
 	if (discriminant_ < 0)
+	{
 		return false;
+	}
 
 	const auto sqrtd_ = std::sqrt(discriminant_);
 
@@ -26,7 +28,9 @@ auto Sphere::isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> b
 	{
 		root_ = (h_ + sqrtd_) / a_;
 		if (!rayT.surrounds(root_))
+		{
 			return false;
+		}
 	}
 
 	hitpoint.m_t         = root_;

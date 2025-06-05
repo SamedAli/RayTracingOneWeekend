@@ -16,12 +16,12 @@ auto Interval::size() const -> double
 	return m_max - m_min;
 }
 
-auto Interval::contains(double x) const -> bool
+auto Interval::contains(double val) const -> bool
 {
-	return m_min <= x && x <= m_max;
+	return m_min <= val && val <= m_max;
 }
 
-auto Interval::surrounds(double x) const -> bool
+auto Interval::surrounds(double val) const -> bool
 {
-	return m_min < x && x < m_max;
+	return m_min < val && val < m_max;
 }

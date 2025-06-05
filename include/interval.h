@@ -6,9 +6,9 @@ class Interval
 	explicit Interval() noexcept;
 	explicit Interval(double min, double max) noexcept;
 
-	auto size() const -> double;
-	auto contains(double x) const -> bool;
-	auto surrounds(double x) const -> bool;
+	[[nodiscard]] auto size() const -> double;
+	[[nodiscard]] auto contains(double val) const -> bool;
+	[[nodiscard]] auto surrounds(double val) const -> bool;
 
 	static const Interval m_empty;
 	static const Interval m_universe;

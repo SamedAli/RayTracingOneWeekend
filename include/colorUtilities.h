@@ -6,4 +6,4 @@
 
 using Color = Vec3;
 
-auto writeColor(std::ostream &out, const Color &c) -> void;
+auto writeColor(std::ostream &out, const Color &color) -> void;

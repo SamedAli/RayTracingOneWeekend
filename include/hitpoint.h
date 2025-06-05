@@ -12,4 +12,6 @@ class HitPoint
 	bool   m_frontFaced;
 
 	auto setFaceNormal(const Ray &ray, const Vec3 &outwardsNormal) -> void;
+
+  private:
 };

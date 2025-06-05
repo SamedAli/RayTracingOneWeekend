@@ -5,54 +5,54 @@
 
 using Point3 = Vec3;
 
-inline auto operator<<(std::ostream &out, const Vec3 &v) -> std::ostream &
+inline auto operator<<(std::ostream &out, const Vec3 &vector) -> std::ostream &
 {
-	return out << v.x() << ' ' << v.y() << ' ' << v.z();
+	return out << vector.x() << ' ' << vector.y() << ' ' << vector.z();
 }
 
-inline auto operator+(const Vec3 &u, const Vec3 &v) -> Vec3
+inline auto operator+(const Vec3 &uVec, const Vec3 &vVec) -> Vec3
 {
-	return Vec3{u.x() + v.x(), u.y() + v.y(), u.z() + v.z()};
+	return Vec3{uVec.x() + vVec.x(), uVec.y() + vVec.y(), uVec.z() + vVec.z()};
 }
 
-inline auto operator-(const Vec3 &u, const Vec3 &v) -> Vec3
+inline auto operator-(const Vec3 &uVec, const Vec3 &vVec) -> Vec3
 {
-	return Vec3{u.x() - v.x(), u.y() - v.y(), u.z() - v.z()};
+	return Vec3{uVec.x() - vVec.x(), uVec.y() - vVec.y(), uVec.z() - vVec.z()};
 }
 
-inline auto operator*(const Vec3 &u, const Vec3 &v) -> Vec3
+inline auto operator*(const Vec3 &uVec, const Vec3 &vVec) -> Vec3
 {
-	return Vec3{u.x() * v.x(), u.y() * v.y(), u.z() * v.z()};
+	return Vec3{uVec.x() * vVec.x(), uVec.y() * vVec.y(), uVec.z() * vVec.z()};
 }
 
-inline auto operator*(const Vec3 &v, double scalar) -> Vec3
+inline auto operator*(const Vec3 &vec, double scalar) -> Vec3
 {
-	return Vec3{v.x() * scalar, v.y() * scalar, v.z() * scalar};
+	return Vec3{vec.x() * scalar, vec.y() * scalar, vec.z() * scalar};
 }
 
-inline auto operator*(double scalar, const Vec3 &v) -> Vec3
+inline auto operator*(double scalar, const Vec3 &vec) -> Vec3
 {
-	return Vec3{v.x() * scalar, v.y() * scalar, v.z() * scalar};
+	return Vec3{vec.x() * scalar, vec.y() * scalar, vec.z() * scalar};
 }
 
-inline auto dot(const Vec3 &u, const Vec3 &v) -> double
+inline auto dot(const Vec3 &uVec, const Vec3 &vVec) -> double
 {
-	return u.x() * v.x() + u.y() * v.y() + u.z() * v.z();
+	return (uVec.x() * vVec.x()) + (uVec.y() * vVec.y()) + (uVec.z() * vVec.z());
 }
 
-inline auto cross(const Vec3 &u, const Vec3 &v) -> Vec3
+inline auto cross(const Vec3 &uVec, const Vec3 &vVec) -> Vec3
 {
-	return Vec3{u.y() * v.z() - u.z() * v.y(),
-	            u.z() * v.x() - u.x() * v.z(),
-	            u.x() * v.y() - u.y() * v.x()};
+	return Vec3{(uVec.y() * vVec.z()) - (uVec.z() * vVec.y()),
+	            (uVec.z() * vVec.x()) - (uVec.x() * vVec.z()),
+	            (uVec.x() * vVec.y()) - (uVec.y() * vVec.x())};
 }
 
-inline auto operator/(const Vec3 &v, double scalar) -> Vec3
+inline auto operator/(const Vec3 &vec, double scalar) -> Vec3
 {
-	return v * (1 / scalar);
+	return vec * (1 / scalar);
 }
 
-inline auto unit(const Vec3 &v) -> Vec3
+inline auto unit(const Vec3 &vec) -> Vec3
 {
-	return v / v.length();
+	return vec / vec.length();
 }

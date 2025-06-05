@@ -6,7 +6,7 @@
 constexpr double INFINITY_C = std::numeric_limits<double>::infinity();
 constexpr double PI_C       = std::numbers::phi_v<double>;
 
-inline constexpr auto degreesToRadians(double degrees) -> double
+constexpr auto degreesToRadians(double degrees) -> double
 {
 	return degrees * PI_C / 180.0;
 }

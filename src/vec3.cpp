@@ -5,8 +5,8 @@ Vec3::Vec3() :
     m_vector{0, 0, 0}
 {}
 
-Vec3::Vec3(double x, double y, double z) :
-    m_vector{x, y, z}
+Vec3::Vec3(double xVal, double yVal, double zVal) :
+    m_vector{xVal, yVal, zVal}
 {}
 
 auto Vec3::x() const -> double
@@ -36,17 +36,17 @@ auto Vec3::length() const -> double
 
 auto Vec3::lengthSquared() const -> double
 {
-	return m_vector[0] * m_vector[0] + m_vector[1] * m_vector[1] + m_vector[2] * m_vector[2];
+	return (m_vector.at(0) * m_vector.at(0)) + (m_vector.at(1) * m_vector.at(1)) + (m_vector.at(2) * m_vector.at(2));
 }
 
-auto Vec3::operator[](std::size_t i) const -> double
+auto Vec3::operator[](std::size_t idx) const -> double
 {
-	return m_vector[i];
+	return m_vector.at(idx);
 }
 
-auto Vec3::operator[](std::size_t i) -> double &
+auto Vec3::operator[](std::size_t idx) -> double &
 {
-	return m_vector[i];
+	return m_vector.at(idx);
 }
 
 auto Vec3::operator-() const -> Vec3
@@ -58,11 +58,11 @@ auto Vec3::operator-() const -> Vec3
 	};
 }
 
-auto Vec3::operator+=(const Vec3 &v) -> Vec3 &
+auto Vec3::operator+=(const Vec3 &vector) -> Vec3 &
 {
-	m_vector[0] += v.x();
-	m_vector[1] += v.y();
-	m_vector[2] += v.z();
+	m_vector[0] += vector.x();
+	m_vector[1] += vector.y();
+	m_vector[2] += vector.z();
 	return *this;
 }
 
