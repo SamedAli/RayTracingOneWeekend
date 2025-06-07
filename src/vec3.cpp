@@ -1,4 +1,7 @@
 #include "vec3.h"
+
+#include "utilityFunctions.h"
+
 #include <cmath>
 
 Vec3::Vec3() :
@@ -77,4 +80,14 @@ auto Vec3::operator*=(double scalar) -> Vec3 &
 auto Vec3::operator/=(double scalar) -> Vec3 &
 {
 	return *this *= scalar;
+}
+
+auto Vec3::random() -> Vec3
+{
+	return Vec3(randomDouble(), randomDouble(), randomDouble());
+}
+
+auto Vec3::random(double min, double max) -> Vec3
+{
+	return Vec3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
 }

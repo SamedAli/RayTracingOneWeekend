@@ -18,12 +18,13 @@ class Camera
 	auto setImageWidth(std::uint32_t width) -> void;
 	auto setAspectRatio(double aspectRatio) -> void;
 	auto setSamplesPerPixel(std::uint32_t nofSamples) -> void;
+	auto setMaxDepthRay(std::uint32_t maxDepth) -> void;
 
   private:
 	auto                      initialize() -> void;
 	[[nodiscard]] auto        getRay(std::uint32_t xCoord, std::uint32_t yCoord) const -> Ray;
 	[[nodiscard]] static auto sampleSquare() -> Vec3;
-	[[nodiscard]] static auto rayColor(const Ray &ray, const Hittable &world) -> Color;
+	[[nodiscard]] static auto rayColor(const Ray &ray, std::uint32_t depth, const Hittable &world) -> Color;
 
 	Vec3          m_pixel0;
 	Vec3          m_deltaX;
@@ -34,4 +35,5 @@ class Camera
 	std::uint32_t m_imageWidth         = 0;
 	std::uint32_t m_imageHeight        = 0;
 	std::uint32_t m_nofSamplesPerPixel = 10;
+	std::uint32_t m_maxDepth           = 10;
 };

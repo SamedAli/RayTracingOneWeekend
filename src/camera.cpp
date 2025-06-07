@@ -29,7 +29,7 @@ auto Camera::render(const Hittable &world) -> void
 			for (size_t sample = 0; sample < m_nofSamplesPerPixel; ++sample)
 			{
 				Ray ray_ = getRay(i, j);
-				pixelColor_ += rayColor(ray_, world);
+				pixelColor_ += rayColor(ray_, m_maxDepth, world);
 			}
 			writeColor(std::cout, m_pixelSampleScale * pixelColor_);
 		}
@@ -60,12 +60,18 @@ auto Camera::initialize() -> void
 	m_pixel0                      = viewportUpperLeft_ + (m_deltaX + m_deltaY) * 0.5;
 }
 
-auto Camera::rayColor(const Ray &ray, const Hittable &world) -> Color
+auto Camera::rayColor(const Ray &ray, std::uint32_t depth, const Hittable &world) -> Color
 {
-	HitPoint hitpoint_;
-	if (world.isHit(ray, Interval(0, INFINITY_C), hitpoint_))
+	if (depth <= 0)
 	{
-		return 0.5 * (hitpoint_.getNormal() + Color(1, 1, 1));
+		return Color{0, 0, 0};
+	}
+
+	HitPoint hitpoint_;
+	if (world.isHit(ray, Interval(0.001, INFINITY_C), hitpoint_))
+	{
+		auto rDir_ = randomVectorOnHemisphere(hitpoint_.getNormal());
+		return 0.5 * rayColor(Ray(hitpoint_.getPoint(), rDir_), depth - 1, world);
 	}
 
 	const auto unitDirection_ = unit(ray.direction()); //[-1< y < 1]?
@@ -93,4 +99,9 @@ auto Camera::sampleSquare() -> Vec3
 auto Camera::setSamplesPerPixel(std::uint32_t nofSamples) -> void
 {
 	m_nofSamplesPerPixel = nofSamples;
+}
+
+auto Camera::setMaxDepthRay(std::uint32_t maxDepth) -> void
+{
+	m_maxDepth = maxDepth;
 }

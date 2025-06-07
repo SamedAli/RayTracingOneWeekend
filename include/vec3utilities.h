@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vec3.h"
+#include <cmath>
 #include <ostream>
 
 using Point3 = Vec3;
@@ -55,4 +56,31 @@ inline auto operator/(const Vec3 &vec, double scalar) -> Vec3
 inline auto unit(const Vec3 &vec) -> Vec3
 {
 	return vec / vec.length();
+}
+
+/*
+    Generate a random vector inside a unit sphere.
+    Pick a vector v(x,y,z). If length is inside unit sphere < 1.
+*/
+inline auto randomUnitVector() -> Vec3
+{
+	while (true)
+	{
+		auto randomVector_        = Vec3::random(-1, 1);
+		auto lengthSquaredVector_ = randomVector_.lengthSquared();
+		if (1e-160 < lengthSquaredVector_ && lengthSquaredVector_ <= 1)
+		{
+			return randomVector_ / std::sqrt(lengthSquaredVector_);
+		}
+	}
+}
+
+inline auto randomVectorOnHemisphere(const Vec3 &normal) -> Vec3
+{
+	Vec3 VecOnUnitSphere_ = randomUnitVector();
+	if (dot(VecOnUnitSphere_, normal) > 0.0)
+	{
+		return VecOnUnitSphere_;
+	}
+	return -VecOnUnitSphere_;
 }

@@ -12,7 +12,8 @@ Checks: >
   -readability-magic-numbers,
   -bugprone-easily-swappable-parameters,
   -readability-identifier-naming,
-  -readability-identifier-length
+  -readability-identifier-length,
+  -misc-no-recursion
 
 WarningsAsErrors: '*'
 

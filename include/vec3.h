@@ -23,8 +23,10 @@ class Vec3
 	[[nodiscard]] auto x() const -> double;
 	auto               value() -> Array3 &;
 
-	[[nodiscard]] auto length() const -> double;
-	[[nodiscard]] auto lengthSquared() const -> double;
+	[[nodiscard]] auto        length() const -> double;
+	[[nodiscard]] auto        lengthSquared() const -> double;
+	[[nodiscard]] static auto random() -> Vec3;
+	[[nodiscard]] static auto random(double min, double max) -> Vec3;
 
 	auto operator[](std::size_t idx) const -> double;
 	auto operator[](std::size_t idx) -> double &;
