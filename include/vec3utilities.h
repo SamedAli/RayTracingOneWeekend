@@ -66,8 +66,8 @@ inline auto randomUnitVector() -> Vec3
 {
 	while (true)
 	{
-		auto randomVector_        = Vec3::random(-1, 1);
-		auto lengthSquaredVector_ = randomVector_.lengthSquared();
+		const auto randomVector_        = Vec3::random(-1, 1);
+		const auto lengthSquaredVector_ = randomVector_.lengthSquared();
 		if (1e-160 < lengthSquaredVector_ && lengthSquaredVector_ <= 1)
 		{
 			return randomVector_ / std::sqrt(lengthSquaredVector_);
@@ -77,7 +77,7 @@ inline auto randomUnitVector() -> Vec3
 
 inline auto randomVectorOnHemisphere(const Vec3 &normal) -> Vec3
 {
-	Vec3 VecOnUnitSphere_ = randomUnitVector();
+	const Vec3 VecOnUnitSphere_ = randomUnitVector();
 	if (dot(VecOnUnitSphere_, normal) > 0.0)
 	{
 		return VecOnUnitSphere_;

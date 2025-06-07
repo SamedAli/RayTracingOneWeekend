@@ -28,7 +28,7 @@ auto Camera::render(const Hittable &world) -> void
 			Color pixelColor_{0, 0, 0};
 			for (size_t sample = 0; sample < m_nofSamplesPerPixel; ++sample)
 			{
-				Ray ray_ = getRay(i, j);
+				const Ray ray_ = getRay(i, j);
 				pixelColor_ += rayColor(ray_, m_maxDepth, world);
 			}
 			writeColor(std::cout, m_pixelSampleScale * pixelColor_);
@@ -70,8 +70,10 @@ auto Camera::rayColor(const Ray &ray, std::uint32_t depth, const Hittable &world
 	HitPoint hitpoint_;
 	if (world.isHit(ray, Interval(0.001, INFINITY_C), hitpoint_))
 	{
-		auto rDir_ = randomVectorOnHemisphere(hitpoint_.getNormal());
-		return 0.5 * rayColor(Ray(hitpoint_.getPoint(), rDir_), depth - 1, world);
+		constexpr double Reflectance_ = 0.3;
+
+		const auto rDir_ = randomVectorOnHemisphere(hitpoint_.getNormal());
+		return Reflectance_ * rayColor(Ray(hitpoint_.getPoint(), rDir_), depth - 1, world);
 	}
 
 	const auto unitDirection_ = unit(ray.direction()); //[-1< y < 1]?
@@ -81,11 +83,11 @@ auto Camera::rayColor(const Ray &ray, std::uint32_t depth, const Hittable &world
 
 auto Camera::getRay(std::uint32_t xCoord, std::uint32_t yCoord) const -> Ray
 {
-	auto offset_      = sampleSquare();
-	auto pixelSample_ = m_pixel0 + ((xCoord + offset_.x()) * m_deltaX) + ((yCoord + offset_.y()) * m_deltaY);
+	const auto offset_      = sampleSquare();
+	const auto pixelSample_ = m_pixel0 + ((xCoord + offset_.x()) * m_deltaX) + ((yCoord + offset_.y()) * m_deltaY);
 
-	auto rOrigin_ = m_cameraCenter;
-	auto rDir_    = pixelSample_ - rOrigin_;
+	const auto rOrigin_ = m_cameraCenter;
+	const auto rDir_    = pixelSample_ - rOrigin_;
 
 	return Ray{rOrigin_, rDir_};
 }

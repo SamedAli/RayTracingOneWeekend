@@ -35,7 +35,7 @@ auto Sphere::isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> b
 
 	hitpoint.setTVal(root_);
 	hitpoint.setPoint(ray.at(hitpoint.getTValue()));
-	auto outwardsNormal_ = (hitpoint.getPoint() - m_center) / m_radius;
+	const auto outwardsNormal_ = (hitpoint.getPoint() - m_center) / m_radius;
 	hitpoint.setFaceNormal(ray, outwardsNormal_);
 
 	return true;

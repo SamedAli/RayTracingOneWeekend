@@ -2,11 +2,26 @@
 
 #include "interval.h"
 
+#include <cmath>
+
+auto LinearToGammaSpace(double linearComponent) -> double
+{
+	if (linearComponent > 0)
+	{
+		return std::sqrt(linearComponent);
+	}
+	return 0;
+}
+
 auto writeColor(std::ostream &out, const Color &color) -> void
 {
-	const auto red_   = color.x();
-	const auto green_ = color.y();
-	const auto blue_  = color.z();
+	auto red_   = color.x();
+	auto green_ = color.y();
+	auto blue_  = color.z();
+
+	red_   = LinearToGammaSpace(red_);
+	green_ = LinearToGammaSpace(green_);
+	blue_  = LinearToGammaSpace(blue_);
 
 	// Translate the [0,1] component values to the byte range [0,255].
 	constexpr double      MAX_PIXEL_VALUE = 256.0;
