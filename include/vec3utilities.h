@@ -84,3 +84,8 @@ inline auto randomVectorOnHemisphere(const Vec3 &normal) -> Vec3
 	}
 	return -VecOnUnitSphere_;
 }
+
+inline auto reflect(const Vec3 &vector, const Vec3 &normal) -> Vec3
+{
+	return vector - 2 * dot(vector, normal) * normal;
+}

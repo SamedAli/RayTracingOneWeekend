@@ -2,10 +2,11 @@
 
 #include <cmath>
 
-Sphere::Sphere(const Point3 &center, double radius) : m_center(center), m_radius(std::fmax(0, radius))
-{}
+Sphere::Sphere(const Point3 &center, double radius, std::shared_ptr<Material> material) : m_material(std::move(material)), m_center(center), m_radius(std::fmax(0, radius))
+{
+}
 
-auto Sphere::isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> bool
+auto Sphere::isHit(const Ray &ray, Interval rayT, Hitpoint &hitpoint) const -> bool
 {
 	const auto oc_ = m_center - ray.origin();
 
@@ -37,6 +38,7 @@ auto Sphere::isHit(const Ray &ray, Interval rayT, HitPoint &hitpoint) const -> b
 	hitpoint.setPoint(ray.at(hitpoint.getTValue()));
 	const auto outwardsNormal_ = (hitpoint.getPoint() - m_center) / m_radius;
 	hitpoint.setFaceNormal(ray, outwardsNormal_);
+	hitpoint.setMaterial(m_material);
 
 	return true;
 }

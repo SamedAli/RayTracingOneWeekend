@@ -1,37 +1,47 @@
 #include "hitpoint.h"
 
-auto HitPoint::setFaceNormal(const Ray &ray, const Vec3 &outwardsNormal) -> void
+auto Hitpoint::setFaceNormal(const Ray &ray, const Vec3 &outwardsNormal) -> void
 {
 	// NOTE: OutwardsNormal should be a unit vector!
 	m_frontFaced = dot(ray.direction(), outwardsNormal) < 0;
 	m_normal     = m_frontFaced ? outwardsNormal : -outwardsNormal;
 }
 
-auto HitPoint::getPoint() const -> const Point3 &
+auto Hitpoint::getPoint() const -> const Point3 &
 {
 	return m_point;
 };
 
-auto HitPoint::getNormal() const -> const Vec3 &
+auto Hitpoint::getNormal() const -> const Vec3 &
 {
 	return m_normal;
 }
 
-auto HitPoint::getTValue() const -> double
+auto Hitpoint::getTValue() const -> double
 {
 	return m_t;
 }
 
-auto HitPoint::isFrontFaced() const -> bool
+auto Hitpoint::isFrontFaced() const -> bool
 {
 	return m_frontFaced;
 }
 
-auto HitPoint::setPoint(const Point3 &point) -> void
+auto Hitpoint::setPoint(const Point3 &point) -> void
 {
 	m_point = point;
 }
-auto HitPoint::setTVal(double tVal) -> void
+auto Hitpoint::setTVal(double tVal) -> void
 {
 	m_t = tVal;
+}
+
+auto Hitpoint::setMaterial(std::shared_ptr<Material> material) -> void
+{
+	m_material = std::move(material);
+}
+
+auto Hitpoint::getMaterial() const -> std::shared_ptr<Material>
+{
+	return m_material;
 }

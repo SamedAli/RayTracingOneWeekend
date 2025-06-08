@@ -15,6 +15,9 @@ set(SOURCES
     src/hitpoint.cpp
     src/interval.cpp
     src/camera.cpp
+    src/lambertian.cpp
+    src/metal.cpp
+    src/material.cpp
 )
 
 add_executable(${PROJECT_NAME}

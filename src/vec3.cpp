@@ -91,3 +91,9 @@ auto Vec3::random(double min, double max) -> Vec3
 {
 	return Vec3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
 }
+
+auto Vec3::isNearZero() -> bool
+{
+	constexpr auto epsilon = 1e-8;
+	return (std::fabs(m_vector.at(0)) < epsilon && std::fabs(m_vector.at(0)) < epsilon && std::fabs(m_vector.at(0)) < epsilon);
+}

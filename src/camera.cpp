@@ -1,5 +1,6 @@
 #include "camera.h"
 
+#include "material.h"
 #include "utilityFunctions.h"
 
 #include <iostream>
@@ -67,13 +68,17 @@ auto Camera::rayColor(const Ray &ray, std::uint32_t depth, const Hittable &world
 		return Color{0, 0, 0};
 	}
 
-	HitPoint hitpoint_;
+	Hitpoint hitpoint_;
 	if (world.isHit(ray, Interval(0.001, INFINITY_C), hitpoint_))
 	{
-		constexpr double Reflectance_ = 0.3;
+		Ray   scattered_;
+		Color attenuation_;
 
-		const auto rDir_ = randomVectorOnHemisphere(hitpoint_.getNormal());
-		return Reflectance_ * rayColor(Ray(hitpoint_.getPoint(), rDir_), depth - 1, world);
+		if (hitpoint_.getMaterial()->scatter(ray, hitpoint_, attenuation_, scattered_))
+		{
+			return attenuation_ * rayColor(scattered_, depth - 1, world);
+		}
+		return Color(0, 0, 0);
 	}
 
 	const auto unitDirection_ = unit(ray.direction()); //[-1< y < 1]?
