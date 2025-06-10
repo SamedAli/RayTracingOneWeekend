@@ -89,3 +89,11 @@ inline auto reflect(const Vec3 &vector, const Vec3 &normal) -> Vec3
 {
 	return vector - 2 * dot(vector, normal) * normal;
 }
+
+inline auto refract(const Vec3 &rayInUnit, const Vec3 &refractiveIndex, double refractionIndexRatio) -> Vec3
+{
+	const auto cosTheta_           = std::fmin(dot(-rayInUnit, refractiveIndex), 1.0);
+	const auto rayOutPerpendicular = refractionIndexRatio * (rayInUnit + cosTheta_ * refractiveIndex);
+	const auto rayOutParallel      = -std::sqrt(std::fabs(1.0 - rayOutPerpendicular.lengthSquared())) * refractiveIndex;
+	return rayOutPerpendicular + rayOutParallel;
+}

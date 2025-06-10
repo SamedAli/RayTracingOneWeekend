@@ -18,6 +18,7 @@ set(SOURCES
     src/lambertian.cpp
     src/metal.cpp
     src/material.cpp
+    src/dielectric.cpp
 )
 
 add_executable(${PROJECT_NAME}

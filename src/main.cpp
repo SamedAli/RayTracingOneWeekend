@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "camera.h"
+#include "dielectric.h"
 #include "hittableObjectsList.h"
 #include "lambertian.h"
 #include "metal.h"
@@ -14,7 +15,7 @@ auto main() -> int
 
 	const auto grounMat_ = std::make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
 	const auto centeMat_ = std::make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
-	const auto leftMat_  = std::make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.0);
+	const auto leftMat_  = std::make_shared<Dielectric>(1.5);
 	const auto rightMat_ = std::make_shared<Metal>(Color(0.8, 0.6, 0.2), 0.7);
 
 	world_.add(std::make_shared<Sphere>(Point3(0.0, -100.5, -1.0), 100.0, grounMat_));
