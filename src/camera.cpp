@@ -39,25 +39,32 @@ auto Camera::render(const Hittable &world) -> void
 
 auto Camera::initialize() -> void
 {
-	auto tmpImHeight_ = static_cast<std::uint32_t>(m_imageWidth / m_aspectRatio);
-	m_imageHeight     = tmpImHeight_ > 1 ? tmpImHeight_ : 1;
+	const auto tmpImHeight_ = static_cast<std::uint32_t>(m_imageWidth / m_aspectRatio);
+	m_imageHeight           = tmpImHeight_ > 1 ? tmpImHeight_ : 1;
 
 	m_pixelSampleScale = 1.0 / m_nofSamplesPerPixel;
-	m_cameraCenter     = Point3{0, 0, 0};
+	m_cameraCenter     = m_lookFrom;
 
 	// Determine viewport dimensions.
-	const auto focalLength_    = 1.0;
-	const auto viewportHeight_ = 2.0;
+	const auto focalLength_    = (m_lookFrom - m_lookAt).length();
+	const auto theta_          = degreesToRadians(m_vfov);
+	const auto h_              = std::tan(theta_ / 2);
+	const auto viewportHeight_ = 2.0 * h_ * focalLength_;
 	const auto viewportWidth_  = viewportHeight_ * (static_cast<double>(m_imageWidth) / m_imageHeight);
 
+	// Calculate the u,v,w unit basis vectors for the camera coordinate frame.
+	m_w = unit(m_lookFrom - m_lookAt);
+	m_u = unit(cross(m_vUp, m_w));
+	m_v = cross(m_w, m_u);
+
 	// Calculate the vectors across the horizontal and down the vertical viewport edges.
-	const auto viewportVectorX_ = Vec3{viewportWidth_, 0, 0};
-	const auto viewportVectorY_ = Vec3{0, -viewportHeight_, 0};
+	const auto viewportVectorX_ = viewportWidth_ * m_u;
+	const auto viewportVectorY_ = viewportHeight_ * -m_v;
 
 	m_deltaX = viewportVectorX_ / m_imageWidth;
 	m_deltaY = viewportVectorY_ / m_imageHeight;
 
-	const auto viewportUpperLeft_ = m_cameraCenter - Vec3(0, 0, focalLength_) - (viewportVectorX_ / 2) - (viewportVectorY_ / 2);
+	const auto viewportUpperLeft_ = m_cameraCenter - (focalLength_ * m_w) - (viewportVectorX_ / 2) - (viewportVectorY_ / 2);
 	m_pixel0                      = viewportUpperLeft_ + (m_deltaX + m_deltaY) * 0.5;
 }
 
@@ -111,4 +118,22 @@ auto Camera::setSamplesPerPixel(std::uint32_t nofSamples) -> void
 auto Camera::setMaxDepthRay(std::uint32_t maxDepth) -> void
 {
 	m_maxDepth = maxDepth;
+}
+
+auto Camera::setVerticalFOV(double vfov) -> void
+{
+	m_vfov = vfov;
+}
+
+auto Camera::setLookFrom(const Point3 &lookFrom) -> void
+{
+	m_lookFrom = lookFrom;
+}
+auto Camera::setLookAt(const Point3 &lookAt) -> void
+{
+	m_lookAt = lookAt;
+}
+auto Camera::setVUp(const Vec3 &vUp) -> void
+{
+	m_vUp = vUp;
 }

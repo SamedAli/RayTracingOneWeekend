@@ -15,8 +15,8 @@ auto main() -> int
 
 	const auto grounMat_  = std::make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
 	const auto centeMat_  = std::make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
-	const auto leftMat_   = std::make_shared<Dielectric>(1.50);
-	const auto bubbleMat_ = std::make_shared<Dielectric>(1.00 / 1.50); // air / water
+	const auto leftMat_   = std::make_shared<Dielectric>(1.5);
+	const auto bubbleMat_ = std::make_shared<Dielectric>(1.00 / 1.33); // air / water
 	const auto rightMat_  = std::make_shared<Metal>(Color(0.8, 0.6, 0.2), 0.7);
 
 	world_.add(std::make_shared<Sphere>(Point3(0.0, -100.5, -1.0), 100.0, grounMat_));
@@ -28,8 +28,13 @@ auto main() -> int
 	Camera camera_{};
 	camera_.setAspectRatio(16.0 / 9.0);
 	camera_.setImageWidth(854); // 480p
-	camera_.setSamplesPerPixel(20);
-	camera_.setMaxDepthRay(10);
+	camera_.setSamplesPerPixel(25);
+	camera_.setMaxDepthRay(15);
+
+	camera_.setVerticalFOV(20);
+	camera_.setLookFrom(Point3(-2, 2, 1));
+	camera_.setLookAt(Point3(0, 0, -1));
+	camera_.setVUp(Vec3(0, 1, 0));
 
 	camera_.render(world_);
 }

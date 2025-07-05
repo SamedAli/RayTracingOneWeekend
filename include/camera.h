@@ -19,6 +19,10 @@ class Camera
 	auto setAspectRatio(double aspectRatio) -> void;
 	auto setSamplesPerPixel(std::uint32_t nofSamples) -> void;
 	auto setMaxDepthRay(std::uint32_t maxDepth) -> void;
+	auto setVerticalFOV(double vfov) -> void;
+	auto setLookFrom(const Point3 &lookFrom) -> void;
+	auto setLookAt(const Point3 &lookAt) -> void;
+	auto setVUp(const Vec3 &vUp) -> void;
 
   private:
 	auto                      initialize() -> void;
@@ -30,6 +34,11 @@ class Camera
 	Vec3          m_deltaX;
 	Vec3          m_deltaY;
 	Vec3          m_cameraCenter;
+	Vec3          m_u, m_v, m_w; // Camera frame basis vectors
+	Vec3          m_vUp                = Vec3(0, 1, 0);
+	Point3        m_lookFrom           = Point3(0, 0, 0);
+	Point3        m_lookAt             = Point3(0, 0, -1);
+	double        m_vfov               = 90; // vertical fov in degrees
 	double        m_aspectRatio        = 0;
 	double        m_pixelSampleScale   = 0; // For averaging accumalated pixel colors.
 	std::uint32_t m_imageWidth         = 0;
