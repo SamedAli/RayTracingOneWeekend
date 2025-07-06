@@ -36,5 +36,8 @@ auto main() -> int
 	camera_.setLookAt(Point3(0, 0, -1));
 	camera_.setVUp(Vec3(0, 1, 0));
 
+	camera_.setFocusAngle(10.0);
+	camera_.setFocusDistance(3.4);
+
 	camera_.render(world_);
 }

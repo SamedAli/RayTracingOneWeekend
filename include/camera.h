@@ -23,24 +23,31 @@ class Camera
 	auto setLookFrom(const Point3 &lookFrom) -> void;
 	auto setLookAt(const Point3 &lookAt) -> void;
 	auto setVUp(const Vec3 &vUp) -> void;
+	auto setFocusAngle(double angle) -> void;
+	auto setFocusDistance(double distance) -> void;
 
   private:
 	auto                      initialize() -> void;
 	[[nodiscard]] auto        getRay(std::uint32_t xCoord, std::uint32_t yCoord) const -> Ray;
 	[[nodiscard]] static auto sampleSquare() -> Vec3;
 	[[nodiscard]] static auto rayColor(const Ray &ray, std::uint32_t depth, const Hittable &world) -> Color;
+	[[nodiscard]] auto        defocusDiskSample() const -> Vec3;
 
 	Vec3          m_pixel0;
 	Vec3          m_deltaX;
 	Vec3          m_deltaY;
 	Vec3          m_cameraCenter;
 	Vec3          m_u, m_v, m_w; // Camera frame basis vectors
-	Vec3          m_vUp                = Vec3(0, 1, 0);
-	Point3        m_lookFrom           = Point3(0, 0, 0);
-	Point3        m_lookAt             = Point3(0, 0, -1);
+	Vec3          m_vUp      = Vec3(0, 1, 0);
+	Point3        m_lookFrom = Point3(0, 0, 0);
+	Point3        m_lookAt   = Point3(0, 0, -1);
+	Vec3          m_defocusDiskU;
+	Vec3          m_defocusDiskV;
 	double        m_vfov               = 90; // vertical fov in degrees
 	double        m_aspectRatio        = 0;
 	double        m_pixelSampleScale   = 0; // For averaging accumalated pixel colors.
+	double        m_defocusAngle       = 0;
+	double        m_focusDistance      = 0;
 	std::uint32_t m_imageWidth         = 0;
 	std::uint32_t m_imageHeight        = 0;
 	std::uint32_t m_nofSamplesPerPixel = 10;

@@ -46,10 +46,10 @@ auto Camera::initialize() -> void
 	m_cameraCenter     = m_lookFrom;
 
 	// Determine viewport dimensions.
-	const auto focalLength_    = (m_lookFrom - m_lookAt).length();
+	// const auto focalLength_    = (m_lookFrom - m_lookAt).length();
 	const auto theta_          = degreesToRadians(m_vfov);
 	const auto h_              = std::tan(theta_ / 2);
-	const auto viewportHeight_ = 2.0 * h_ * focalLength_;
+	const auto viewportHeight_ = 2.0 * h_ * m_focusDistance;
 	const auto viewportWidth_  = viewportHeight_ * (static_cast<double>(m_imageWidth) / m_imageHeight);
 
 	// Calculate the u,v,w unit basis vectors for the camera coordinate frame.
@@ -64,8 +64,12 @@ auto Camera::initialize() -> void
 	m_deltaX = viewportVectorX_ / m_imageWidth;
 	m_deltaY = viewportVectorY_ / m_imageHeight;
 
-	const auto viewportUpperLeft_ = m_cameraCenter - (focalLength_ * m_w) - (viewportVectorX_ / 2) - (viewportVectorY_ / 2);
+	const auto viewportUpperLeft_ = m_cameraCenter - (m_focusDistance * m_w) - (viewportVectorX_ / 2) - (viewportVectorY_ / 2);
 	m_pixel0                      = viewportUpperLeft_ + (m_deltaX + m_deltaY) * 0.5;
+
+	const auto defocusRadius_ = m_focusDistance * std::tan(degreesToRadians(m_defocusAngle / 2));
+	m_defocusDiskU            = m_u * defocusRadius_;
+	m_defocusDiskV            = m_v * defocusRadius_;
 }
 
 auto Camera::rayColor(const Ray &ray, std::uint32_t depth, const Hittable &world) -> Color
@@ -93,12 +97,18 @@ auto Camera::rayColor(const Ray &ray, std::uint32_t depth, const Hittable &world
 	return (1.0 - scalar_) * Color(1.0, 1.0, 1.0) + scalar_ * Color(0.5, 0.7, 1.0);
 }
 
+auto Camera::defocusDiskSample() const -> Vec3
+{
+	const auto p_ = randomUnitDisk();
+	return (m_cameraCenter + (p_[0] * m_defocusDiskU) + (p_[1] * m_defocusDiskV));
+}
+
 auto Camera::getRay(std::uint32_t xCoord, std::uint32_t yCoord) const -> Ray
 {
 	const auto offset_      = sampleSquare();
 	const auto pixelSample_ = m_pixel0 + ((xCoord + offset_.x()) * m_deltaX) + ((yCoord + offset_.y()) * m_deltaY);
 
-	const auto rOrigin_ = m_cameraCenter;
+	const auto rOrigin_ = (m_defocusAngle <= 0) ? m_cameraCenter : defocusDiskSample();
 	const auto rDir_    = pixelSample_ - rOrigin_;
 
 	return Ray{rOrigin_, rDir_};
@@ -136,4 +146,13 @@ auto Camera::setLookAt(const Point3 &lookAt) -> void
 auto Camera::setVUp(const Vec3 &vUp) -> void
 {
 	m_vUp = vUp;
+}
+
+auto Camera::setFocusAngle(double angle) -> void
+{
+	m_defocusAngle = angle;
+}
+auto Camera::setFocusDistance(double distance) -> void
+{
+	m_focusDistance = distance;
 }

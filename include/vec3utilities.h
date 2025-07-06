@@ -1,6 +1,9 @@
 #pragma once
 
 #include "vec3.h"
+
+#include "utilityFunctions.h"
+
 #include <cmath>
 #include <ostream>
 
@@ -92,8 +95,20 @@ inline auto reflect(const Vec3 &vector, const Vec3 &normal) -> Vec3
 
 inline auto refract(const Vec3 &rayInUnit, const Vec3 &refractiveIndex, double refractionIndexRatio) -> Vec3
 {
-	const auto cosTheta_           = std::fmin(dot(-rayInUnit, refractiveIndex), 1.0);
-	const auto rayOutPerpendicular = refractionIndexRatio * (rayInUnit + cosTheta_ * refractiveIndex);
-	const auto rayOutParallel      = -std::sqrt(std::fabs(1.0 - rayOutPerpendicular.lengthSquared())) * refractiveIndex;
-	return rayOutPerpendicular + rayOutParallel;
+	const auto cosTheta_            = std::fmin(dot(-rayInUnit, refractiveIndex), 1.0);
+	const auto rayOutPerpendicular_ = refractionIndexRatio * (rayInUnit + cosTheta_ * refractiveIndex);
+	const auto rayOutParallel_      = -std::sqrt(std::fabs(1.0 - rayOutPerpendicular_.lengthSquared())) * refractiveIndex;
+	return rayOutPerpendicular_ + rayOutParallel_;
+}
+
+inline auto randomUnitDisk() -> Vec3
+{
+	while (true)
+	{
+		auto p_ = Vec3(randomDouble(-1, 1), randomDouble(-1, 1), 0);
+		if (p_.lengthSquared() < 1)
+		{
+			return p_;
+		}
+	}
 }
